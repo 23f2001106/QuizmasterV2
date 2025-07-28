@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Monthly Report - {{ month }}</title>
+  <style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+    color: #333;
+    font-size: 14px;
+  }
+  .report-container {
+    max-width: 700px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+  }
+  h1, h2 {
+    color: #222;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  th, td {
+    border: 1px solid #999;
+    padding: 8px 10px;
+    text-align: left;
+  }
+  th {
+    background-color: #eee;
+  }
+  .summary {
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 1px solid #ccc;
+  }
+  .summary p {
+    margin: 5px 0;
+  }
+  </style>
+
+</head>
+<body>
+  <div class="report-container">
+    <h1>Monthly Report</h1>
+    <h2>Hello {{ username }},</h2>
+    <p>Here is your quiz activity summary for <strong>{{ month }}</strong>:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Quiz Title</th>
+          <th>Date</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for quiz in quizzes %}
+        <tr>
+          <td>{{ quiz.name }}</td>
+          <td>{{ quiz.date }}</td>
+          <td>{{ quiz.score }}%</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="summary">
+      <p><strong>Total Quizzes:</strong> {{ total_quizzes }}</p>
+      <p><strong>Average Score:</strong> {{ average_score }}%</p>
+    </div>
+  </div>
+</body>
+</html>
+

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz Reminder</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fafafa;
+      margin: 0;
+      padding: 0;
+    }
+    .email-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      padding: 20px;
+    }
+    h2 {
+      color: #2b2b2b;
+    }
+    p {
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    .cta-button {
+      margin-top: 20px;
+      display: inline-block;
+      padding: 10px 15px;
+      background-color: #28a745;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+    }
+    .footer {
+      font-size: 12px;
+      color: #999;
+      margin-top: 30px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <h2>Hello {{ username }},</h2>
+    <p>Just a reminder to complete the quiz <strong>"{{ quiz_title }}"</strong> before <strong>{{ due_date }}</strong>.</p>
+    
+    <p>This quiz is relevant to your progress and will help boost your score!</p>
+
+    <a class="cta-button" href="{{ quiz_url }}">Take Quiz Now</a>
+
+    <div class="footer">
+      You're receiving this because you opted in for daily reminders.
+    </div>
+  </div>
+</body>
+</html>
