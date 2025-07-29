@@ -39,21 +39,18 @@
     </div>
 
     <BaseLoader v-if="loading" />
-    <BaseMessage v-if="error" :message="error" type="error" />
-    <BaseMessage v-if="success" :message="success" type="success" />
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import { useToast } from "vue-toastification";
 import BaseLoader from "../BaseLoader.vue";
-import BaseMessage from "../BaseMessage.vue";
 
 export default {
   name: "OtpVerification",
   components: {
     BaseLoader,
-    BaseMessage,
   },
   props: {
     userId: {
@@ -107,9 +104,8 @@ export default {
   },
   methods: {
     async submitOtp() {
+      const toast = useToast();
       this.loading = true;
-      this.error = null;
-      this.success = null;
 
       try {
         const payload = {
@@ -122,28 +118,28 @@ export default {
             ? await axios.delete(this.endpoint, { data: payload })
             : await axios.post(this.endpoint, payload);
 
-        this.success = "OTP verified successfully!";
+        toast.success("OTP verified successfully!");
         this.$emit("verified", response.data); // Notify parent
       } catch (err) {
-        this.error =
+        const errorMsg =
           err.response?.data?.message ||
           err.response?.data?.error ||
           "OTP verification failed.";
+        toast.error(errorMsg);
       } finally {
         this.loading = false;
       }
     },
     async resendOtp() {
+      const toast = useToast();
       this.loading = true;
-      this.error = null;
-      this.success = null;
       this.resendDisabled = true;
       try {
         await axios.post("/auth/resend-otp", {
           user_id: this.userId,
           context: this.context,
         });
-        this.success = "OTP resent successfully!";
+        toast.success("OTP resent successfully!");
         this.cooldown = 60;
         this.countdown();
       } catch (err) {
@@ -154,7 +150,9 @@ export default {
             err.response.data.message || "Please wait before retrying.";
           this.countdown();
         } else {
-          this.error = err.response?.data?.message || "Failed to resend OTP.";
+          const errorMsg =
+            err.response?.data?.message || "Failed to resend OTP.";
+          toast.error(errorMsg);
           this.resendDisabled = false;
         }
       } finally {

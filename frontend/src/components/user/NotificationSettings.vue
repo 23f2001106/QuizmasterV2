@@ -26,6 +26,7 @@
 
 <script>
 import axios from "axios";
+import { useToast } from "vue-toastification";
 
 export default {
   props: ["user"],
@@ -37,11 +38,19 @@ export default {
   },
   methods: {
     async updateSettings() {
-      await axios.patch("/user/settings", {
-        notifications_enabled: this.notifications_enabled,
-        preferred_reminder_time: this.preferred_reminder_time,
-      });
-      this.$emit("updated");
+      const toast = useToast();
+      try {
+        await axios.patch("/user/settings", {
+          notifications_enabled: this.notifications_enabled,
+          preferred_reminder_time: this.preferred_reminder_time,
+        });
+        toast.success("Notification settings updated");
+        this.$emit("updated");
+      } catch (err) {
+        const msg = err.response?.data?.error || "Failed to update settings.";
+        toast.error(msg);
+        console.error("Update settings failed:", err);
+      }
     },
   },
 };

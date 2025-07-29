@@ -33,22 +33,40 @@
 
 <script>
 import axios from "axios";
+import { useToast } from "vue-toastification";
 
 export default {
   props: ["user"],
   data() {
     return {
       form: {
-        full_name: this.user.full_name,
-        qualification: this.user.qualification,
+        full_name: this.user.full_name || "",
+        qualification: this.user.qualification || "",
         dob: this.user.dob ? this.user.dob.slice(0, 10) : null,
       },
     };
   },
   methods: {
     async updateProfile() {
-      await axios.put("/user/settings", this.form);
-      this.$emit("updated");
+      const toast = useToast();
+      try {
+        const payload = {
+          ...this.form,
+          full_name: this.form.full_name.trim() || undefined,
+          qualification: this.form.qualification.trim() || undefined,
+          dob: this.form.dob || undefined,
+        };
+        await axios.put("/user/settings", payload);
+        toast.success("Profile updated!");
+        this.$emit("updated");
+      } catch (err) {
+        if (err.response && err.response.data?.error) {
+          toast.error("Error: " + err.response.data.error);
+        } else {
+          toast.error("An unexpected error occurred.");
+        }
+        console.error(err);
+      }
     },
   },
 };
