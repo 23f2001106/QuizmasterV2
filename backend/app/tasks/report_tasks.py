@@ -25,7 +25,7 @@ def register_report_tasks(celery):
         month_end = datetime(now.year, now.month, last_day, 23, 59, 59)
 
         users = User.query.filter_by(is_verified=True, status='active', role ='user').all()
-        print(f"Found {len(users)} users")
+        logger.info(f"Found {len(users)} users")
 
         for user in users:
             
@@ -41,17 +41,24 @@ def register_report_tasks(celery):
             )
 
             quizzes_list = []
-            total_score = 0
+            total_percentage = 0
             for quiz, score_obj in scores:
+                question_count = len(quiz.questions)
+                
+                if question_count == 0:
+                    logger.warning(f"Quiz '{quiz.name}' has no questions. Skipping.")
+                    continue
+                
+                percentage = round((score_obj.total_scored / question_count) * 100, 2)
                 quizzes_list.append({
                     "name": quiz.name,
                     "date": score_obj.time_stamp_of_attempt.strftime("%Y-%m-%d"),
-                    "score": score_obj.total_scored,
+                    "score": percentage,  
                 })
-                total_score += score_obj.total_scored
+                total_percentage += percentage
 
             total_quizzes = len(quizzes_list)
-            average_score = round(total_score / total_quizzes, 2) if total_quizzes > 0 else 0
+            average_score = round(total_percentage / total_quizzes, 2) if total_quizzes > 0 else 0
 
             context = {
                 "username": user.full_name,
@@ -66,7 +73,7 @@ def register_report_tasks(celery):
                 attachments.append(("monthly_report.pdf", pdf_bytes, "application/pdf"))
 
             except Exception as e:
-                print(f"Failed to generate PDF for user {user.username}: {e}")
+                logger.error(f"Failed to generate PDF for user {user.username}: {e}")
             
             send_email(
                 to=user.username,

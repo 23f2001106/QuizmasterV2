@@ -59,7 +59,7 @@ class Config:
         },
         'send-daily-reminders': {
             'task': 'send_daily_reminders',
-            'schedule': crontab(minute=0, hour='6-23'),  # Every hour from 6AM to 11PM
+            'schedule': crontab(minute='0,30', hour='5-23'),  # Every 30 min from 5AM to 11PM
         },
         'send-monthly-report': {
             'task': 'send_monthly_report',

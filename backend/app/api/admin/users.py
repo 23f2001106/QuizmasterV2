@@ -3,11 +3,14 @@ from flask import request
 from app.models import User, UserStatusEnum, RoleEnum
 from app.extensions import db
 from app.decorators.auth_decorators import admin_required
+from app.utils.cache_utils import cache_response, rate_limit, invalidate_cache_for_users
 
 
 class UserListResource(Resource):
     method_decorators = [admin_required]
 
+    @rate_limit(limit=100, window=60)
+    @cache_response(ttl=120)
     def get(self):
         try:
             users = User.query.filter(User.role != RoleEnum.ADMIN).all()
@@ -37,6 +40,8 @@ class UserListResource(Resource):
 class UserResource(Resource):
     method_decorators = [admin_required]
 
+    @rate_limit(limit=100, window=60)
+    @cache_response(ttl=60)
     def get(self, user_id):
         try:
             user = User.query.get(user_id)
@@ -64,6 +69,7 @@ class UserResource(Resource):
 class UserStatusResource(Resource):
     method_decorators = [admin_required]
 
+    @rate_limit(limit=100, window=60)
     def put(self, user_id):
         try:
             user = User.query.get(user_id)
@@ -78,6 +84,8 @@ class UserStatusResource(Resource):
 
             user.status = UserStatusEnum[new_status]
             db.session.commit()
+
+            invalidate_cache_for_users()
             return {"msg": f"User status updated to {new_status}"}, 200
 
         except Exception as e:

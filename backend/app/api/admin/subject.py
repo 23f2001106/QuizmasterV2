@@ -3,10 +3,13 @@ from flask_restful import Resource, abort
 from app.models import Subject
 from app.extensions import db
 from app.decorators.auth_decorators import admin_required
+from app.utils.cache_utils import cache_response, rate_limit, invalidate_cache_for_subjects
 
 class SubjectListResource(Resource):
     method_decorators = [admin_required]
 
+    @rate_limit(limit=100, window=60)
+    @cache_response(ttl=120)
     def get(self):
         try:
             subjects = Subject.query.all()
@@ -30,6 +33,7 @@ class SubjectListResource(Resource):
         except Exception as e:
             return {"msg": f"Failed to retrieve subjects: {str(e)}"}, 500
 
+    @rate_limit(limit=50, window=60)
     def post(self):
         try:
             data = request.get_json()
@@ -43,6 +47,7 @@ class SubjectListResource(Resource):
             subject = Subject(name=name, level=level, description=description)
             db.session.add(subject)
             db.session.commit()
+            invalidate_cache_for_subjects()
 
             return {"msg": "Subject created", "id": subject.id}, 201
         except Exception as e:
@@ -52,6 +57,8 @@ class SubjectListResource(Resource):
 class SubjectResource(Resource):
     method_decorators = [admin_required]
 
+    @rate_limit(limit=100, window=60)
+    @cache_response(ttl=120)
     def get(self, subject_id):
         try:
             subject = Subject.query.get(subject_id)
@@ -77,6 +84,7 @@ class SubjectResource(Resource):
         except Exception as e:
             return {"msg": f"Failed to retrieve subject: {str(e)}"}, 500
 
+    @rate_limit(limit=50, window=60)
     def put(self, subject_id):
         try:
             subject = Subject.query.get(subject_id)
@@ -89,11 +97,13 @@ class SubjectResource(Resource):
             subject.description = data.get('description', subject.description)
 
             db.session.commit()
+            invalidate_cache_for_subjects()
             return {"msg": "Subject updated"}, 200
         except Exception as e:
             db.session.rollback()
             return {"msg": f"Error updating subject: {str(e)}"}, 500
 
+    @rate_limit(limit=50, window=60)
     def delete(self, subject_id):
         try:
             subject = Subject.query.get(subject_id)
@@ -102,6 +112,7 @@ class SubjectResource(Resource):
 
             db.session.delete(subject)
             db.session.commit()
+            invalidate_cache_for_subjects()
             return {"msg": "Subject deleted"}, 200
         except Exception as e:
             db.session.rollback()

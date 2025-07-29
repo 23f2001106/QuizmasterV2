@@ -5,11 +5,12 @@ from app.utils.cache_utils import *
 from app.extensions import db
 from app.decorators import verified_and_active_user_required, get_current_user_or_abort
 from datetime import time, datetime
-
+from app.utils.cache_utils import rate_limit, invalidate_user_profile_cache
 
 class UserSettingsResource(Resource):
     method_decorators = [verified_and_active_user_required]
 
+    @rate_limit(limit=50, window=60)
     def put(self):
         """Update profile settings"""
         user = get_current_user_or_abort(require_verified=True)
@@ -36,8 +37,10 @@ class UserSettingsResource(Resource):
             user.dob = dob
 
         db.session.commit()
+        invalidate_user_profile_cache(user.id)
         return {"message": "Profile updated successfully"}, 200
 
+    @rate_limit(limit=50, window=60)
     def patch(self):
         """Update notifications and preferred reminder time"""
         user = get_current_user_or_abort(require_verified=True)
@@ -73,6 +76,7 @@ class UserSettingsResource(Resource):
                 return {"error": "Invalid time format. Use HH:MM or HH:MM:SS (24-hour)."}, 400
 
         db.session.commit()
+        invalidate_user_profile_cache(user.id)
         return {
             "message": "Notification settings updated.",
             "notifications_enabled": user.notifications_enabled,
@@ -83,6 +87,7 @@ class UserSettingsResource(Resource):
 class AccountDeletionResource(Resource):
     method_decorators = [verified_and_active_user_required]
 
+    @rate_limit(limit=50, window=60)
     def post(self):
         """Step 1: Submit password to receive OTP"""
         user = get_current_user_or_abort(require_verified=True)
@@ -113,6 +118,7 @@ class AccountDeletionResource(Resource):
         
         return {"message": "OTP sent to your email."}, 200
 
+    @rate_limit(limit=50, window=60)
     def delete(self):
         """Step 2: Submit OTP to confirm deletion"""
         user = get_current_user_or_abort(require_verified=True)
@@ -129,5 +135,6 @@ class AccountDeletionResource(Resource):
         delete_otp(user.id)
         db.session.delete(user)
         db.session.commit()
+        invalidate_user_profile_cache(user.id)
 
         return {"message": "Your account has been deleted."}, 200

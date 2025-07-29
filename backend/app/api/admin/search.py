@@ -1,5 +1,5 @@
 from flask_restful import Resource, reqparse
-from app.models import User, Subject, Quiz
+from app.models import User, Subject, Quiz, RoleEnum
 from app.decorators.auth_decorators import admin_required
 from sqlalchemy.orm import subqueryload
 
@@ -20,7 +20,8 @@ class AdminSearch(Resource):
         if category == "users":
             users = User.query.filter(
                 (User.username.ilike(f'%{query}%')) | 
-                (User.full_name.ilike(f'%{query}%'))
+                (User.full_name.ilike(f'%{query}%')) &
+                (User.role != RoleEnum.ADMIN)
             ).all()
             results = [
                 {

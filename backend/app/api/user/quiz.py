@@ -1,11 +1,14 @@
 from flask_restful import Resource
 from app.models import Quiz, Chapter
 from app.decorators import get_current_user_or_abort, verified_and_active_user_required
+from app.utils.cache_utils import cache_response, rate_limit
 from sqlalchemy.orm import joinedload
 
 class UserQuizListResource(Resource):
     method_decorators = [verified_and_active_user_required]
 
+    @rate_limit(limit=100, window=60)
+    @cache_response(ttl=120)
     def get(self):
         user = get_current_user_or_abort()
         quizzes = (

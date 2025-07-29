@@ -1,49 +1,59 @@
-from flask import request
-from flask_restful import Resource, fields, marshal_with, abort
+from flask import  request
+from flask_restful import Resource, abort
 from app.models import Quiz
 from app.extensions import db
 from app.decorators.auth_decorators import admin_required
 from datetime import datetime
+from app.utils.cache_utils import cache_response, invalidate_cache_for_quizzes, rate_limit
 
-# For question titles under a quiz
-question_summary_fields = {
-    'id': fields.Integer,
-    'question_statement': fields.String
-}
-
-# For listing all quizzes
-quiz_list_fields = {
-    'id': fields.Integer,
-    'name': fields.String,
-    'date_of_quiz': fields.DateTime(dt_format='iso8601'),
-    'due_date': fields.DateTime(dt_format='iso8601'),
-    'time_duration': fields.String,
-    'remarks': fields.String,
-    'date_created': fields.DateTime(dt_format='iso8601'),
-    'questions': fields.List(fields.Nested(question_summary_fields)),
-    'chapter': fields.Nested({
-        'id': fields.Integer,
-        'name': fields.String
-    }),
-    'subject': fields.Nested({
-        'id': fields.Integer,
-        'name': fields.String
-    })
-}
 
 class QuizListResource(Resource):
     method_decorators = [admin_required]
 
-    @marshal_with(quiz_list_fields)
+    @rate_limit(limit=100, window=60)
+    @cache_response(ttl=120)
     def get(self):
         try:
             quizzes = Quiz.query.all()
+            
+            # Explicitly access related data to avoid lazy loading issues
             for quiz in quizzes:
                 _ = quiz.chapter.subject
-            return quizzes, 200
+            
+            # Manually build the response list
+            quizzes_list = []
+            for quiz in quizzes:
+                quiz_dict = {
+                    'id': quiz.id,
+                    'name': quiz.name,
+                    'date_of_quiz': quiz.date_of_quiz.isoformat() if quiz.date_of_quiz else None,
+                    'due_date': quiz.due_date.isoformat() if quiz.due_date else None,
+                    'time_duration': quiz.time_duration.isoformat() if quiz.time_duration else None,
+                    'remarks': quiz.remarks,
+                    'date_created': quiz.date_created.isoformat() if quiz.date_created else None,
+                    'questions': [
+                        {
+                            'id': question.id,
+                            'question_statement': question.question_statement
+                        } for question in quiz.questions
+                    ],
+                    'chapter': {
+                        'id': quiz.chapter.id,
+                        'name': quiz.chapter.name
+                    } if quiz.chapter else None,
+                    'subject': {
+                        'id': quiz.chapter.subject.id,
+                        'name': quiz.chapter.subject.name
+                    } if quiz.chapter and quiz.chapter.subject else None
+                }
+                quizzes_list.append(quiz_dict)
+            
+            return quizzes_list, 200
+        
         except Exception as e:
             return {"msg": f"Error retrieving quizzes: {str(e)}"}, 500
 
+    @rate_limit(limit=50, window=60)
     def post(self):
         try:
             data = request.get_json()
@@ -67,6 +77,8 @@ class QuizListResource(Resource):
             db.session.add(quiz)
             db.session.commit()
 
+            invalidate_cache_for_quizzes()
+
             return {"msg": "Quiz created", "id": quiz.id}, 201
         except Exception as e:
             db.session.rollback()
@@ -76,6 +88,8 @@ class QuizListResource(Resource):
 class QuizResource(Resource):
     method_decorators = [admin_required]
 
+    @rate_limit(limit=100, window=60)
+    @cache_response(ttl=120)
     def get(self, quiz_id):
         try:
             quiz = Quiz.query.get(quiz_id)
@@ -107,6 +121,7 @@ class QuizResource(Resource):
         except Exception as e:
             return {"msg": f"Error retrieving quiz: {str(e)}"}, 500
 
+    @rate_limit(limit=50, window=60)
     def put(self, quiz_id):
         try:
             quiz = Quiz.query.get(quiz_id)
@@ -121,11 +136,15 @@ class QuizResource(Resource):
             quiz.remarks = data.get('remarks', quiz.remarks)
 
             db.session.commit()
+
+            invalidate_cache_for_quizzes()
+
             return {"msg": "Quiz updated"}, 200
         except Exception as e:
             db.session.rollback()
             return {"msg": f"Error updating quiz: {str(e)}"}, 500
 
+    @rate_limit(limit=50, window=60)
     def delete(self, quiz_id):
         try:
             quiz = Quiz.query.get(quiz_id)
@@ -134,6 +153,8 @@ class QuizResource(Resource):
 
             db.session.delete(quiz)
             db.session.commit()
+            invalidate_cache_for_quizzes()
+
             return {"msg": "Quiz deleted"}, 200
         except Exception as e:
             db.session.rollback()
