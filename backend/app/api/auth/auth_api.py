@@ -145,10 +145,8 @@ class RequestPasswordResetResource(Resource):
         if user.check_password(new_password):
             return {"message": "New password cannot be the same as the old password"}, 400
 
-        # Temporarily store new password (can use Redis)
         set_temp_password(user.id, new_password)
 
-        # Generate and send OTP
         otp = generate_otp()
         set_otp(user.id, otp)
         current_app.celery.send_task(
@@ -213,7 +211,6 @@ class ResendOtpResource(Resource):
                 "cooldown": ttl
             }, 429
         
-        # Only allow resend in valid states
         if context == 'register' and user.is_verified:
             return {"message": "User already verified."}, 400
 

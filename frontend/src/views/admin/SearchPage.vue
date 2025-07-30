@@ -3,11 +3,9 @@
     <SideBar />
 
     <div class="main-content">
-      <!-- Loader -->
       <BaseLoader v-if="loading" />
 
       <div v-else>
-        <!-- Welcome -->
         <header class="page-header">
           <h2>Welcome, Admin</h2>
         </header>

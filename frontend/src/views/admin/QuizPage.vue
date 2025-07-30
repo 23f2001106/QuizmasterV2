@@ -3,17 +3,14 @@
     <SideBar />
 
     <div class="main-content">
-      <!-- Loader -->
       <BaseLoader v-if="loading" />
 
       <div v-else>
-        <!-- Welcome -->
         <header class="page-header">
           <h2>Welcome, Admin</h2>
         </header>
 
         <h4 class="section-title p-4">Quizzes</h4>
-        <!-- Add Quiz Button -->
         <div class="text-center mt-4 mb-4">
           <button class="btn btn-special" @click="openQuizModal('add')">
             Add Quiz
@@ -28,7 +25,6 @@
                 </div>
 
                 <div class="card-body">
-                  <!-- Questions Table -->
                   <table class="table table-striped table-bordered quiz-table">
                     <thead>
                       <tr>
@@ -72,7 +68,6 @@
                     </tbody>
                   </table>
 
-                  <!-- Add Question Button -->
                   <button
                     class="btn btn-success btn-sm"
                     @click="addQuestion(quiz.id)"
@@ -80,7 +75,6 @@
                     Add Question
                   </button>
 
-                  <!-- Quiz Actions -->
                   <div class="mt-3 text-center">
                     <button
                       class="btn btn-primary btn-sm"
@@ -114,7 +108,6 @@
     </div>
   </div>
   <AppFooter />
-  <!-- Modals -->
   <FormModal
     v-if="showModal"
     :title="modalTitle"

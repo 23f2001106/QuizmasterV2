@@ -3,7 +3,6 @@ from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 from flask_caching import Cache
-from redis import Redis
 from celery import Celery
 from flask import current_app
 

@@ -9,7 +9,7 @@ class Quiz(db.Model):
     chapter_id = db.Column(db.Integer, db.ForeignKey('chapter.id'), nullable=False)
     date_of_quiz = db.Column(db.DateTime, nullable=False)
     due_date = db.Column(db.DateTime, nullable=False)
-    time_duration = db.Column(db.Time, nullable=False)  # e.g. time(hour=0, minute=30)
+    time_duration = db.Column(db.Time, nullable=False)
     remarks = db.Column(db.Text, nullable=True)
     date_created = db.Column(db.DateTime, default=datetime.now, nullable=False)
 

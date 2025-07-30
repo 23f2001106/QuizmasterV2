@@ -126,7 +126,7 @@ def invalidate_user_profile_cache(user_id=None):
     invalidate_cache_by_prefix(f"cache:/api/user/profile:user:{user_id}")
 
 
-def rate_limit(limit=100, window=60):   # 10 requests per minute
+def rate_limit(limit=100, window=60):   # 100 requests per minute
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):

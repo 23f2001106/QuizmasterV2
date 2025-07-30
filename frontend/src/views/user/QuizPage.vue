@@ -1,17 +1,13 @@
 <template>
   <div class="quiz-page d-flex flex-column min-vh-100">
-    <!-- Main content area with sidebar and content -->
     <div class="d-flex flex-grow-1">
-      <!-- Sidebar -->
       <div class="sidebar bg-light">
         <SideBar />
       </div>
 
-      <!-- Main Content -->
       <div class="flex-grow-1 p-4">
         <h2 class="mb-4">Available Quizzes</h2>
 
-        <!-- Filters and Sort Options -->
         <div class="mb-1 row">
           <div class="col-md-12">
             <select v-model="sortField" class="form-select">
@@ -28,10 +24,8 @@
           </button>
         </div>
 
-        <!-- Loader -->
         <BaseLoader v-if="loading" />
 
-        <!-- No Quizzes -->
         <div v-else-if="filteredQuizzes.length === 0" class="alert alert-info">
           No quizzes available.
         </div>
@@ -214,7 +208,6 @@ export default {
 </script>
 
 <style scoped>
-/* Container & Layout */
 .quiz-page {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f9fafb;
@@ -222,7 +215,6 @@ export default {
   min-height: 100vh;
 }
 
-/* Main Content */
 .flex-grow-1.p-4 {
   background-color: #fff;
   border-radius: 0 8px 8px 0;
@@ -231,14 +223,12 @@ export default {
   overflow-x: auto;
 }
 
-/* Headings */
 h2 {
   font-weight: 700;
   color: #2c3e50;
   padding-bottom: 40px;
 }
 
-/* Filters and Sorting */
 select.form-select {
   border: 1.5px solid #ced4da;
   border-radius: 6px;
@@ -300,7 +290,6 @@ select.form-select:focus {
   background-color: #dfdede;
 }
 
-/* Alerts */
 .alert-info {
   background-color: #e7f3fe;
   color: #31708f;
@@ -310,7 +299,6 @@ select.form-select:focus {
   font-size: 1.1rem;
 }
 
-/* Buttons in table */
 .btn-sm {
   border-radius: 6px;
   font-weight: 600;
@@ -355,7 +343,6 @@ select.form-select:focus {
   opacity: 1;
 }
 
-/* Responsive tweaks */
 @media (max-width: 576px) {
   .flex-grow-1.p-4 {
     padding: 1rem 1.25rem;

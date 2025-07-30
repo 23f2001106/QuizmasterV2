@@ -3,16 +3,13 @@
     <SideBar />
 
     <div class="main-content">
-      <!-- Loader -->
       <BaseLoader v-if="loading" />
 
       <div v-else>
-        <!-- Welcome -->
         <header class="dashboard-header">
           <h2>Welcome, {{ dashboard.full_name }}</h2>
         </header>
 
-        <!-- Stats Cards -->
         <div class="stats-cards">
           <div class="stat-card">
             <div class="card-body">
@@ -30,7 +27,6 @@
           </div>
         </div>
 
-        <!-- Last Quiz -->
         <div class="last-quiz" v-if="dashboard.last_quiz">
           <h3 class="card-title">Last Quiz Summary</h3>
           <div class="stat-card">
@@ -45,7 +41,6 @@
           </div>
         </div>
 
-        <!-- Upcoming Quizzes -->
         <div class="upcoming-quizzes">
           <h3 class="card-title">Upcoming Quizzes</h3>
           <table
@@ -74,7 +69,6 @@
           <p v-else>No upcoming quizzes.</p>
         </div>
 
-        <!-- Performance Breakdown -->
         <div class="performance-chart">
           <h3>Performance Breakdown</h3>
           <div v-if="hasPerformanceData">

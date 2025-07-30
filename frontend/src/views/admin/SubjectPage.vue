@@ -3,17 +3,14 @@
     <SideBar />
 
     <div class="main-content">
-      <!-- Loader -->
       <BaseLoader v-if="loading" />
 
       <div v-else>
-        <!-- Welcome -->
         <header class="page-header">
           <h2>Welcome, Admin</h2>
         </header>
 
         <h4 class="section-title p-4">Subjects</h4>
-        <!-- Add Subject Button -->
         <div class="text-center mt-4 mb-4">
           <button class="btn btn-special" @click="openSubjectModal('add')">
             Add Subject
@@ -73,7 +70,6 @@
                     No chapters available
                   </p>
 
-                  <!-- Add Chapter Button -->
                   <button
                     class="btn btn-success btn-sm"
                     @click="addChapter(subject.id)"
@@ -81,7 +77,6 @@
                     Add Chapter
                   </button>
 
-                  <!-- Edit/Delete Subject Buttons -->
                   <div class="mt-3 text-center">
                     <button
                       class="btn btn-primary btn-sm"
@@ -115,7 +110,6 @@
   </div>
   <AppFooter />
 
-  <!-- Modal -->
   <FormModal
     v-if="showModal"
     :title="modalTitle"

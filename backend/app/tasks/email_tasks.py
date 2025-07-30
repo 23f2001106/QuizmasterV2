@@ -1,11 +1,11 @@
-from app.extensions import celery
+
 from app.utils.email_utils import send_email
 
 def register_email_tasks(celery):
     @celery.task(name='send_verification_email')
     def send_verification_email(user_email, otp, context="register"):
         """
-        Send a verification email for registration or password reset.
+        Send a verification email for registration or password reset or account deletion.
 
         """
         subject_map = {

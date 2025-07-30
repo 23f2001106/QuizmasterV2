@@ -3,11 +3,9 @@
     <SideBar />
 
     <div class="main-content">
-      <!-- Loader -->
       <BaseLoader v-if="loading" />
 
       <div v-else>
-        <!-- Welcome -->
         <header class="summary-header">
           <h2>Welcome, {{ summary.full_name }}</h2>
         </header>
