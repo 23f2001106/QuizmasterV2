@@ -19,6 +19,7 @@ Quiz Master - V2 is a multi-user web application designed as an **exam preparati
 | Caching / Queue  | Redis                 |
 | Task Queue       | Celery                |
 | Styling          | Bootstrap             |
+| Mails            | STMP                  |
 
 
 ## Setup Instructions
@@ -90,16 +91,7 @@ npm install
 npm run serve
 ```
 
-### 7. Run Debug Mail Server
-
-To test email-related functionality:
-
-```
-cd backend
-python debug_smtp_server.py
-```
-
-### 8. Optional: Run Manual Tasks
+### 7. Optional: Run Manual Tasks
 
 Run background tasks manually:
 
@@ -107,6 +99,9 @@ Run background tasks manually:
 cd backend
 python manual_tasks_runner.py
 ```
+
+
+To view mails use `Mailhog UI`
 
 ### Admin Login Setup
 
