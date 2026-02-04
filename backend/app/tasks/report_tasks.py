@@ -34,8 +34,8 @@ def register_report_tasks(celery):
                 .join(Score, (Score.quiz_id == Quiz.id))
                 .filter(
                     Score.user_id == user.id,
-                    Quiz.date_of_quiz >= month_start,
-                    Quiz.date_of_quiz <= month_end
+                    Score.time_stamp_of_attempt >= month_start,
+                    Score.time_stamp_of_attempt <= month_end
                 )
                 .all()
             )

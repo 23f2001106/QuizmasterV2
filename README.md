@@ -29,7 +29,7 @@ Follow the steps below to set up and run the application on your local machine.
 ### 1. Clone the Repository
 
 ```
-git clone https://github.com/23f2001106/MAD-2-Project.git.git
+git clone https://github.com/23f2001106/QuizmasterV2.git
 cd MAD-2-Project
 ```
 
