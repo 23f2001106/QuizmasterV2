@@ -25,7 +25,7 @@
                 </div>
 
                 <div class="card-body">
-                  <table class="table table-striped table-bordered quiz-table">
+                  <table class="table table-bordered quiz-table">
                     <thead>
                       <tr>
                         <th>ID</th>
@@ -534,27 +534,46 @@ export default {
   font-size: 1.5rem;
   font-weight: 600;
 }
+
 .quiz-table {
   background-color: #ffffff;
-  border: 1px solid #dfe3e8;
+  border: 1px solid #e3eaf1;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 5px rgba(100, 120, 140, 0.06);
   table-layout: fixed;
+  overflow: hidden;
 }
 
 .quiz-table th {
-  background-color: #4caf50;
-  color: #ffffff;
+  background-color: #d1e8ff;
+  color: #4e4e4e;
   text-align: center;
+  font-weight: 600;
+
+  border-color: #e1e9ee;
+  padding: 11px;
+}
+
+.quiz-table tbody tr:nth-child(odd) td {
+  background-color: #ffffff;
+}
+
+.quiz-table tbody tr:nth-child(even) td {
+  background-color: #f9fafa;
 }
 
 .quiz-table td {
   text-align: center;
   padding: 10px;
+
+  color: #687585;
+  background-color: #ffffff;
+
+  border-color: #edf0f3;
 }
 
 .quiz-table tbody tr:hover td {
-  background-color: #f7f9fc !important;
+  background-color: #f4f4f4 !important;
   transition: background-color 0.2s ease;
 }
 
@@ -585,9 +604,12 @@ export default {
 }
 
 .card {
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
+  color: #526b7a;
+  border: 1px solid #e3eaf1;
+  box-shadow: 0 4px 10px rgba(100, 120, 140, 0.07);
+  border-radius: 12px;
   margin-bottom: 20px;
+  overflow: hidden;
 }
 
 .card:hover {
@@ -597,21 +619,31 @@ export default {
 }
 
 .card-header {
-  background-color: #61d67f;
+  background-color: #6bc2e7;
   color: white;
   text-align: center;
   font-size: 20px;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+  border: none;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  padding: 14px 16px;
 }
 
-.card-body {
+.card-header h5 {
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+card-body {
   padding: 20px;
+  background-color: #ffffff;
 }
 
 .card-footer {
   text-align: center;
-  background-color: #f8f9fa;
+  background-color: #f7f9fb;
+  border-top: 1px solid #e5ebf0;
 }
 
 .btn-success {
@@ -654,18 +686,21 @@ export default {
 }
 
 .btn-special {
-  background-color: rgb(32, 192, 187);
-  color: #ffffff;
-  padding: 1rem;
-  font-size: 1.25rem;
-  font-weight: 400;
+  background-color: transparent;
+  color: #278f91;
+  border: 1.5px solid #278f91;
+  padding: 0.7rem 1.4rem;
+  font-size: 1.05rem;
+  font-weight: 600;
   border-radius: 0.6rem;
+  transition: all 0.2s ease-in-out;
 }
 
 .btn-special:hover {
-  background-color: transparent;
-  color: rgb(32, 192, 187);
-  border: 1px solid rgb(32, 192, 187);
+  background-color: #2b9d9f;
+  color: #ffffff;
+  border-color: #278f91;
+  transform: translateY(-1px);
 }
 
 .mt-3 .btn {

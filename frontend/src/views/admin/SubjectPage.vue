@@ -30,7 +30,7 @@
                 <div class="card-body">
                   <table
                     v-if="subject.chapters.length"
-                    class="table table-striped table-bordered subject-table"
+                    class="table table-bordered subject-table"
                   >
                     <thead>
                       <tr>
@@ -354,7 +354,7 @@ export default {
 .page-layout {
   display: flex;
   min-height: 100vh;
-  background-color: #f9f9f9;
+  background-color: #f5f8fc;
 }
 
 .main-content {
@@ -368,33 +368,52 @@ export default {
   margin-bottom: 2rem;
   font-size: 1.5rem;
   font-weight: 600;
+  color: #26364a;
 }
+
 .subject-table {
   background-color: #ffffff;
-  border: 1px solid #dfe3e8;
+  border: 1px solid #e3eaf1;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 5px rgba(100, 120, 140, 0.06);
   table-layout: fixed;
+  overflow: hidden;
 }
 
 .subject-table th {
-  background-color: #a7c7e7;
-  color: #3c4d61;
+  background-color: #d1e8ff;
+  color: #4e4e4e;
   text-align: center;
+  font-weight: 600;
+
+  border-color: #e1e9ee;
+  padding: 11px;
+}
+
+.subject-table tbody tr:nth-child(odd) td {
+  background-color: #ffffff;
+}
+
+.subject-table tbody tr:nth-child(even) td {
+  background-color: #f9fafa;
 }
 
 .subject-table td {
   text-align: center;
   padding: 10px;
+
+  color: #687585;
+  background-color: #ffffff;
+
+  border-color: #edf0f3;
 }
 
 .subject-table tbody tr:hover td {
-  background-color: #f7f9fc !important;
+  background-color: #f4f4f4 !important;
   transition: background-color 0.2s ease;
 }
 
 .subject-table .btn {
-  margin: 0 5px;
   font-size: 14px;
   margin: 5px;
 }
@@ -402,60 +421,54 @@ export default {
 .no-chapters-msg {
   padding: 15px 0;
   font-size: 0.95rem;
-  background-color: #f9f9f9;
-  border: 1px dashed #ccc;
+  color: #8a98a8 !important;
+  background-color: #fafbfd;
+  border: 1px dashed #d5dfe8;
   margin-top: 10px;
   border-radius: 5px;
 }
 
-@media (max-width: 768px) {
-  .subject-table {
-    font-size: 12px;
-  }
-
-  .subject-table th,
-  .subject-table td {
-    padding: 8px;
-  }
-
-  .subject-table .btn {
-    font-size: 10px;
-    padding: 4px 8px;
-  }
-
-  .card-body {
-    overflow-x: auto;
-  }
-}
-
 .card {
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
+  color: #526b7a;
+  border: 1px solid #e3eaf1;
+  box-shadow: 0 4px 10px rgba(100, 120, 140, 0.07);
+  border-radius: 12px;
   margin-bottom: 20px;
+  overflow: hidden;
 }
 
 .card:hover {
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 7px 16px rgba(100, 120, 140, 0.1);
   transform: scale(1.02);
   transition: all 0.2s ease-in-out;
 }
 
 .card-header {
-  background-color: #5bb9e1;
+  background-color: #6bc2e7;
   color: white;
   text-align: center;
   font-size: 20px;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+  border: none;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  padding: 14px 16px;
+}
+
+.card-header h5 {
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: 0.2px;
 }
 
 .card-body {
   padding: 20px;
+  background-color: #ffffff;
 }
 
 .card-footer {
   text-align: center;
-  background-color: #f8f9fa;
+  background-color: #f7f9fb;
+  border-top: 1px solid #e5ebf0;
 }
 
 .btn-success {
@@ -497,22 +510,46 @@ export default {
 }
 
 .btn-special {
-  background-color: rgb(32, 192, 187);
-  color: #ffffff;
-  padding: 1rem;
-  font-size: 1.25rem;
-  font-weight: 400;
+  background-color: transparent;
+  color: #278f91;
+  border: 1.5px solid #278f91;
+  padding: 0.7rem 1.4rem;
+  font-size: 1.05rem;
+  font-weight: 600;
   border-radius: 0.6rem;
+  transition: all 0.2s ease-in-out;
 }
 
 .btn-special:hover {
-  background-color: transparent;
-  color: rgb(32, 192, 187);
-  border: 1px solid rgb(32, 192, 187);
+  background-color: #2b9d9f;
+  color: #ffffff;
+  border-color: #278f91;
+  transform: translateY(-1px);
 }
 
 .mt-3 .btn {
   margin: 0.5rem;
-  padding: 0.6rem;
+  padding: 0.6rem 0.9rem;
+  border-radius: 5px;
+}
+
+@media (max-width: 768px) {
+  .subject-table {
+    font-size: 12px;
+  }
+
+  .subject-table th,
+  .subject-table td {
+    padding: 8px;
+  }
+
+  .subject-table .btn {
+    font-size: 10px;
+    padding: 4px 8px;
+  }
+
+  .card-body {
+    overflow-x: auto;
+  }
 }
 </style>

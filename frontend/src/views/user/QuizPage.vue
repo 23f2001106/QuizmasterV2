@@ -263,17 +263,18 @@ select.form-select:focus {
   width: 100%;
   margin: 20px 0;
   border-collapse: collapse;
-  background-color: #f9f9f9;
+  background-color: #ffffff;
   border-radius: 8px;
   overflow: hidden;
 }
 
 .available-quiz-table thead {
-  background-color: #4adbca;
-  color: #314a67;
+  background-color: #eaf1fd;
+  color: #374151;
 }
 
 .available-quiz-table th {
+  font-weight: 600;
   padding: 12px !important;
   font-size: 1rem;
   text-align: left;
@@ -282,12 +283,13 @@ select.form-select:focus {
 
 .available-quiz-table td {
   padding: 12px !important;
-  font-size: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 14px;
   color: #333;
 }
 
 .available-quiz-table tbody tr:hover {
-  background-color: #dfdede;
+  background-color: #f9fafb;
 }
 
 .alert-info {
