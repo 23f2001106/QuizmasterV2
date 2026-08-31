@@ -22,28 +22,74 @@ Quiz Master - V2 is a multi-user web application designed as an **exam preparati
 | Mails            | STMP                  |
 
 
+## Prerequisites
+
+Before setting up Quiz Master - V2, make sure the following software is installed on your system:
+
+- **Python 3.10+**
+- **Node.js 18+** and **npm**
+- **Redis**
+- **MailHog** (for local email testing)
+- **Git**
+
 ## Setup Instructions
 
 Follow the steps below to set up and run the application on your local machine.
 
-### 1. Clone the Repository
+1. Clone the Repository
 
-```
+```bash
 git clone https://github.com/23f2001106/QuizmasterV2.git
-cd MAD-2-Project
+cd QuizmasterV2
 ```
 
-### 2. Start Redis
+2. Create a `.env` file
+
+Copy `.env.example` to `.env`.
+
+```bash
+# On Windows
+copy backend\.env.example backend\.env
+# On Linux/macOS
+cp backend/.env.example backend/.env
+```
+
+3. Start Redis
 
 Ensure Redis is installed and running:
 
-```sudo service redis-server start
+```bash
+sudo service redis-server start
 redis-cli ping   # Should return "PONG"
 ```
 
-### 3. Setup Backend (Flask)
+4. Start MailHog
 
-```cd backend
+MailHog is used to capture emails locally during development without sending them to real email addresses.
+
+Start MailHog in a separate terminal:
+
+```bash
+mailhog
+```
+
+By default:
+
+- SMTP Server: `localhost:1025`
+- MailHog UI: `http://localhost:8025`
+
+Open the MailHog UI in your browser:
+
+```
+http://localhost:8025
+```
+Keep MailHog running while using the application. 
+All emails sent by the application will appear in the MailHog inbox.
+
+5. Setup Backend (Flask)
+
+```bash
+cd backend
 python3 -m venv venv
 source venv/bin/activate
 
@@ -54,54 +100,54 @@ pip install -r requirements.txt
 python run.py
 ```
 
-### 4. Setup the Database
+6. Setup the Database
 
 Run the following commands:
 
-```
+```bash
 flask db init   # Initialize migrations directory (only required once)
 flask db migrate -m "Initial migration"
 flask db upgrade
 ```
 
-### 5. Run Celery Workers
+7. Run Celery Workers
 
 In separate terminals:
 
 **Worker:**
 
-bash
-```cd backend
+```bash
+cd backend
 source venv/bin/activate
 celery -A celery_worker.celery worker --loglevel=info
 ```
 
 **Beat Scheduler:**
 
-```
+```bash
 cd backend
 source venv/bin/activate
 celery -A celery_beat.celery beat --loglevel=info
 ```
 
-### 6. Setup Frontend (Vue.js)
+8. Setup Frontend (Vue.js)
 
-```cd frontend
+In a separate terminal:
+
+```bash
+cd frontend
 npm install
 npm run serve
 ```
 
-### 7. Optional: Run Manual Tasks
+9. Optional: Run Manual Tasks
 
 Run background tasks manually:
 
-```
+```bash
 cd backend
 python manual_tasks_runner.py
 ```
-
-
-To view mails use `Mailhog UI`
 
 ### Admin Login Setup
 
